@@ -1,0 +1,18 @@
+package com.desz.entertainment.rockscissorspaper.player;
+
+import com.desz.entertainment.rockscissorspaper.functions.MoveLeger;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
+
+@Builder(toBuilder = true)
+@Value
+public class GamePlayer {
+	@NonNull
+	private Boolean isRandom;
+	@NonNull
+	private String id;
+	@NonNull
+	private MoveLeger move;
+
+}
