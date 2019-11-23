@@ -1,6 +1,7 @@
 package com.desz.entertainment.rockscissorspaper.functions;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static com.desz.entertainment.rockscissorspaper.functions.Move.*;
 import static com.desz.entertainment.rockscissorspaper.functions.MoveFunction.compareMove;
 
@@ -33,6 +34,13 @@ public class TestMoveFunction {
 	public void test_exp_scissors_and_scissors_equal_draw() {
 
 		assertEquals(DRAW, compareMove.apply(new MoveLeger(SCISSORS), new MoveLeger(SCISSORS)));
+
+	}
+	
+	@Test
+	public void test_exp_scissors_and_paper__does_not_equal_draw() {
+
+		assertNotEquals(DRAW, compareMove.apply(new MoveLeger(SCISSORS), new MoveLeger(PAPER)));
 
 	}
 

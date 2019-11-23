@@ -1,6 +1,8 @@
 package com.desz.entertainment.rockscissorspaper.functions;
 
+import java.util.Random;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import static com.desz.entertainment.rockscissorspaper.functions.Move.*;
 
@@ -21,9 +23,19 @@ public interface MoveFunction {
 		return null;
 	}
 	
-	static BiFunction<MoveLeger, MoveLeger, Move> compareMove = (m1, m2) -> {
+	BiFunction<MoveLeger, MoveLeger, Move> compareMove = (m1, m2) -> {
 		return m2.getMove().equals(m1.getMove()) ? DRAW : meth(m1, m2);
 	
 	};
+	
+	Supplier<Move> getRandomMove = () -> {
+		Move[] moves = Move.values();
+		Random random = new Random();
+		int index = random.nextInt(moves.length);
+		Move move = moves[index];
+		return move;//.equals(DRAW) ? getRandomMove.get() : move;
+	};
+	
+	
 
 }
