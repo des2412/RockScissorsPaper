@@ -33,7 +33,7 @@ public interface MoveFunction {
 		Random random = new Random();
 		int index = random.nextInt(moves.length);
 		Move move = moves[index];
-		return move;//.equals(DRAW) ? getRandomMove.get() : move;
+		return move;
 	};
 	
 	

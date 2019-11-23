@@ -7,9 +7,11 @@ import static com.desz.entertainment.rockscissorspaper.functions.Move.DRAW;
 import static com.desz.entertainment.rockscissorspaper.functions.Move.ROCK;
 import static com.desz.entertainment.rockscissorspaper.functions.MoveFunction.compareMove;
 import static com.desz.entertainment.rockscissorspaper.functions.MoveFunction.getRandomMove;
+import static java.util.stream.Collectors.toList;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.desz.entertainment.rockscissorspaper.functions.Move;
 import com.desz.entertainment.rockscissorspaper.functions.MoveLeger;
@@ -24,7 +26,7 @@ public class RockPaperScissors {
 
 	String playGame(List<GamePlayer> players) {
 		Move m = compareMove.apply(players.get(0).getMove(), players.get(1).getMove());
-		return m.equals(DRAW) ? "Result is draw" : "winner is" + m.toString();
+		return m.equals(DRAW) ? "draw" : "winner:" + m.toString();
 
 	}
 
@@ -41,15 +43,19 @@ public class RockPaperScissors {
 	public static void main(String args[]) {
 
 		RockPaperScissors o = new RockPaperScissors();
-		// Get Random move
-		Move randomMove = o.getRandomMove();
 
-		GamePlayer random = GamePlayer.builder().id("random").isRandom(true).move(new MoveLeger(o.getRandomMove()))
-				.build();
+		List<GamePlayer> randomPlayers = Stream.generate(
+				() -> GamePlayer.builder().id("random").isRandom(true).move(new MoveLeger(o.getRandomMove())).build())
+				.limit(100).collect(toList());
 
-		GamePlayer rocker = GamePlayer.builder().id("rocker").isRandom(false).move(new MoveLeger(ROCK)).build();
+		final GamePlayer rocker = GamePlayer.builder().id("rocker").isRandom(false).move(new MoveLeger(ROCK)).build();
 
-		o.playGame(Arrays.asList(new GamePlayer[] { random, rocker }));
+		StringBuilder sb = new StringBuilder();
+		for (GamePlayer player : randomPlayers) {
+			sb.append("Random player plays:" + player.getMove().getMove().name() + " - ");
+			sb.append(" " + o.playGame(asList(new GamePlayer[] { player, rocker })) + System.lineSeparator());
+		}
+		System.out.print(sb.toString());
 
 	}
 
