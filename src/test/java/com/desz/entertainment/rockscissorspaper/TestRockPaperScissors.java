@@ -1,15 +1,21 @@
 package com.desz.entertainment.rockscissorspaper;
 
-import static org.junit.Assert.*;
-
+import static com.desz.entertainment.rockscissorspaper.functions.Move.DRAW;
+import static com.desz.entertainment.rockscissorspaper.functions.Move.PAPER;
+import static com.desz.entertainment.rockscissorspaper.functions.Move.ROCK;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
+import java.util.function.IntConsumer;
+import java.util.stream.IntStream;
 
 import org.junit.Before;
 import org.junit.Test;
-import static com.desz.entertainment.rockscissorspaper.functions.Move.*;
-import com.desz.entertainment.rockscissorspaper.functions.Move;
-import com.desz.entertainment.rockscissorspaper.functions.MoveLeger;
+
+import com.desz.entertainment.rockscissorspaper.functions.MoveHandler;
 import com.desz.entertainment.rockscissorspaper.player.GamePlayer;
 
 public class TestRockPaperScissors {
@@ -22,29 +28,41 @@ public class TestRockPaperScissors {
 	}
 
 	@Test
-	public void testGetRandomMove() {
+	public void test_exp_not_null() {
 
 		assertNotNull(sut.getRandomMove());
 
 	}
 
 	@Test
+	public void test_never_draw() {
+		IntStream.rangeClosed(0, 50).forEach(new IntConsumer() {
+
+			@Override
+			public void accept(int value) {
+
+				assertFalse(sut.getRandomMove().equals(DRAW));
+
+			}
+
+		});
+
+	}
+
+	@Test
 	public void test_play_game_expect_winner_or_draw() {
-		RockPaperScissors sut = new RockPaperScissors();
 
-		MoveLeger rnd = MoveLeger.builder().move(sut.getRandomMove()).build();
+		final GamePlayer random = GamePlayer.builder().id("1")
+				.moveHandler(MoveHandler.builder().move(sut.getRandomMove()).build()).build();
+		final GamePlayer rocker = GamePlayer.builder().id("2").moveHandler(MoveHandler.builder().move(ROCK).build())
+				.build();
 
-		MoveLeger roc = MoveLeger.builder().move(ROCK).build();
+		final List<GamePlayer> players = asList(new GamePlayer[] { random, rocker });
 
-		GamePlayer random = GamePlayer.builder().id("1").isRandom(true).move(rnd).build();
-		GamePlayer rocker = GamePlayer.builder().id("2").isRandom(false).move(roc).build();
-
-		List<GamePlayer> players = asList(new GamePlayer[] { random, rocker });
-
-		String s = sut.playGame(players);
+		final String s = sut.playGame(players);
 
 		assertNotNull(s);
-		assertTrue(s.contains("winner") | s.contains("draw"));
+		assertTrue(s.contains("Winner") | s.contains("Draw"));
 
 	}
 
@@ -52,19 +70,15 @@ public class TestRockPaperScissors {
 	public void test_play_game_expect_winner() {
 		RockPaperScissors sut = new RockPaperScissors();
 
-		MoveLeger pap = MoveLeger.builder().move(PAPER).build();
-
-		MoveLeger roc = MoveLeger.builder().move(ROCK).build();
-
-		GamePlayer paper = GamePlayer.builder().id("1").isRandom(false).move(pap).build();
-		GamePlayer rocker = GamePlayer.builder().id("2").isRandom(false).move(roc).build();
+		GamePlayer paper = GamePlayer.builder().id("1").moveHandler(MoveHandler.builder().move(PAPER).build()).build();
+		GamePlayer rocker = GamePlayer.builder().id("2").moveHandler(MoveHandler.builder().move(ROCK).build()).build();
 
 		List<GamePlayer> players = asList(new GamePlayer[] { paper, rocker });
 
 		String s = sut.playGame(players);
 
 		assertNotNull(s);
-		assertTrue(s.contains("winner"));
+		assertTrue(s.contains("Winner"));
 
 	}
 
@@ -72,18 +86,14 @@ public class TestRockPaperScissors {
 	public void test_play_game_expect_draw() {
 		RockPaperScissors sut = new RockPaperScissors();
 
-		// MoveLeger pap = MoveLeger.builder().move(Move.PAPER).build();
+		GamePlayer rocker = GamePlayer.builder().id("2").moveHandler(MoveHandler.builder().move(ROCK).build()).build();
 
-		MoveLeger roc = MoveLeger.builder().move(ROCK).build();
+		final List<GamePlayer> players = asList(new GamePlayer[] { rocker, rocker });
 
-		GamePlayer rocker = GamePlayer.builder().id("2").isRandom(false).move(roc).build();
-
-		List<GamePlayer> players = asList(new GamePlayer[] { rocker, rocker });
-
-		String s = sut.playGame(players);
+		final String s = sut.playGame(players);
 
 		assertNotNull(s);
-		assertTrue(s.contains("draw"));
+		assertTrue(s.contains("Draw"));
 
 	}
 

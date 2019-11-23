@@ -8,7 +8,7 @@ import static com.desz.entertainment.rockscissorspaper.functions.Move.*;
 
 public interface MoveFunction {
 
-	static Move meth(MoveLeger m1, MoveLeger m2) {
+	static Move meth(MoveHandler m1, MoveHandler m2) {
 		switch (m1.getMove()) {
 		case ROCK:
 			return m2.getMove().equals(SCISSORS) ? ROCK : m2.getMove();
@@ -22,20 +22,16 @@ public interface MoveFunction {
 		}
 		return null;
 	}
-	
-	BiFunction<MoveLeger, MoveLeger, Move> compareMove = (m1, m2) -> {
+
+	BiFunction<MoveHandler, MoveHandler, Move> compareMove = (m1, m2) -> {
 		return m2.getMove().equals(m1.getMove()) ? DRAW : meth(m1, m2);
-	
+
 	};
-	
+
 	Supplier<Move> getRandomMove = () -> {
-		Move[] moves = Move.values();
+		final Move[] moves = Move.values();
 		Random random = new Random();
-		int index = random.nextInt(moves.length);
-		Move move = moves[index];
-		return move;
+		return moves[random.nextInt(moves.length)];
 	};
-	
-	
 
 }

@@ -5,18 +5,24 @@ import lombok.Value;
 
 @Builder(toBuilder = true)
 @Value
-public final class MoveLeger {
-	
+public final class MoveHandler {
+
 	private final Move move;
-	/*
-	 * The Move this beats!
+
+	/**
+	 * 
+	 * @param move The Move this beats.
 	 */
-	public MoveLeger(Move move){
+	public MoveHandler(Move move) {
 		this.move = move;
 	}
+
+	/**
+	 * 
+	 * @return the Move.
+	 */
 	public Move getMove() {
 		return move;
 	}
-	
-	
+
 }

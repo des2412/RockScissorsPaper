@@ -7,26 +7,38 @@ import static com.desz.entertainment.rockscissorspaper.functions.Move.DRAW;
 import static com.desz.entertainment.rockscissorspaper.functions.Move.ROCK;
 import static com.desz.entertainment.rockscissorspaper.functions.MoveFunction.compareMove;
 import static com.desz.entertainment.rockscissorspaper.functions.MoveFunction.getRandomMove;
-import static java.util.stream.Collectors.toList;
-
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.leftPad;
+import static org.apache.commons.lang3.StringUtils.repeat;
+import static org.apache.commons.lang3.StringUtils.rightPad;
+
 import java.util.List;
 import java.util.stream.Stream;
 
 import com.desz.entertainment.rockscissorspaper.functions.Move;
-import com.desz.entertainment.rockscissorspaper.functions.MoveLeger;
+import com.desz.entertainment.rockscissorspaper.functions.MoveHandler;
 import com.desz.entertainment.rockscissorspaper.player.GamePlayer;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author des
+ * 
+ * the min application class.
  *
  */
-//@Slf4j
+@Slf4j
 public class RockPaperScissors {
 
+	/**
+	 * 
+	 * @param players
+	 * @return the results for a game between two players.
+	 */
 	String playGame(List<GamePlayer> players) {
-		Move m = compareMove.apply(players.get(0).getMove(), players.get(1).getMove());
-		return m.equals(DRAW) ? "draw" : "winner:" + m.toString();
+		Move m = compareMove.apply(players.get(0).getMoveHandler(), players.get(1).getMoveHandler());
+		return m.equals(DRAW) ? "Draw" : "Winner:" + m.toString();
 
 	}
 
@@ -44,18 +56,25 @@ public class RockPaperScissors {
 
 		RockPaperScissors o = new RockPaperScissors();
 
-		List<GamePlayer> randomPlayers = Stream.generate(
-				() -> GamePlayer.builder().id("random").isRandom(true).move(new MoveLeger(o.getRandomMove())).build())
+		List<GamePlayer> randomPlayers = Stream
+				.generate(() -> GamePlayer.builder().id("random")
+						.moveHandler(MoveHandler.builder().move(o.getRandomMove()).build()).build())
 				.limit(100).collect(toList());
 
-		final GamePlayer rocker = GamePlayer.builder().id("rocker").isRandom(false).move(new MoveLeger(ROCK)).build();
+		final GamePlayer rocker = GamePlayer.builder().id("rocker")
+				.moveHandler(MoveHandler.builder().move(ROCK).build()).build();
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
+
+		sb.append(rightPad("Random Player", 25));
+		sb.append(leftPad("Result", 5) + System.lineSeparator());
+		sb.append(repeat("-", 38) + System.lineSeparator());
+
 		for (GamePlayer player : randomPlayers) {
-			sb.append("Random player plays:" + player.getMove().getMove().name() + " - ");
-			sb.append(" " + o.playGame(asList(new GamePlayer[] { player, rocker })) + System.lineSeparator());
+			sb.append(rightPad(player.getMoveHandler().getMove().name(), 25));
+			sb.append(leftPad(o.playGame(asList(new GamePlayer[] { player, rocker })) + System.lineSeparator(), 5));
 		}
-		System.out.print(sb.toString());
+		log.info(sb.toString());
 
 	}
 
