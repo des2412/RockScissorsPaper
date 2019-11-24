@@ -8,8 +8,6 @@ import lombok.Value;
 @Builder(toBuilder = true)
 @Value
 public class GamePlayer {
-	// @NonNull
-	// private Boolean isRandom;
 	@NonNull
 	private String id;
 	@NonNull

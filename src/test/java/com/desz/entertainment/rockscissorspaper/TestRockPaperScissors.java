@@ -4,10 +4,12 @@ import static com.desz.entertainment.rockscissorspaper.functions.Move.DRAW;
 import static com.desz.entertainment.rockscissorspaper.functions.Move.PAPER;
 import static com.desz.entertainment.rockscissorspaper.functions.Move.ROCK;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
@@ -24,7 +26,16 @@ public class TestRockPaperScissors {
 
 	@Before
 	public void init() {
-		sut = new RockPaperScissors();
+		sut = new RockPaperScissors(
+				GamePlayer.builder().id("rocker").moveHandler(MoveHandler.builder().move(ROCK).build()).build());
+	}
+
+	@Test
+	public void test_verify_statistics_exp_not_null() {
+		final IntSummaryStatistics stats = sut.verifyStats(asList(1, 0, 1));
+		assertNotNull(stats);
+		assertEquals(2, stats.getSum());
+		assertEquals("0.66", RockPaperScissors.decimalFormat.format(stats.getAverage()));
 	}
 
 	@Test
@@ -68,7 +79,6 @@ public class TestRockPaperScissors {
 
 	@Test
 	public void test_play_game_expect_winner() {
-		RockPaperScissors sut = new RockPaperScissors();
 
 		GamePlayer paper = GamePlayer.builder().id("1").moveHandler(MoveHandler.builder().move(PAPER).build()).build();
 		GamePlayer rocker = GamePlayer.builder().id("2").moveHandler(MoveHandler.builder().move(ROCK).build()).build();
@@ -84,7 +94,6 @@ public class TestRockPaperScissors {
 
 	@Test
 	public void test_play_game_expect_draw() {
-		RockPaperScissors sut = new RockPaperScissors();
 
 		GamePlayer rocker = GamePlayer.builder().id("2").moveHandler(MoveHandler.builder().move(ROCK).build()).build();
 
