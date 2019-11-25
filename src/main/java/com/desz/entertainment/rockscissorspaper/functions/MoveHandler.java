@@ -1,12 +1,13 @@
 package com.desz.entertainment.rockscissorspaper.functions;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 
 @Builder(toBuilder = true)
 @Value
 public final class MoveHandler {
-
+	@NonNull
 	private final Move move;
 
 	/**
@@ -15,14 +16,8 @@ public final class MoveHandler {
 	 */
 	public MoveHandler(Move move) {
 		this.move = move;
-	}
-
-	/**
-	 * 
-	 * @return the Move.
-	 */
-	public Move getMove() {
-		return move;
+		if (move.equals(Move.DRAW))
+			throw new RuntimeException();
 	}
 
 }

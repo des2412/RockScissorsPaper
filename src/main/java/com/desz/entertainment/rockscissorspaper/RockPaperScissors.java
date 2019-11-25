@@ -40,12 +40,16 @@ public class RockPaperScissors {
 
 	final GamePlayer player;
 	final List<Integer> aggregatedScore = new ArrayList<>();
-	static final DecimalFormat decimalFormat = new DecimalFormat("#.##");
+	static final DecimalFormat DEC_FORMAT = new DecimalFormat("#.##");
 
 	static {
-		decimalFormat.setRoundingMode(RoundingMode.FLOOR);
+		DEC_FORMAT.setRoundingMode(RoundingMode.FLOOR);
 	}
 
+	/**
+	 * 
+	 * @param player the GamePlayer.
+	 */
 	public RockPaperScissors(GamePlayer player) {
 		this.player = player;
 	}
@@ -64,17 +68,22 @@ public class RockPaperScissors {
 	 * @return the result for a game between two players.
 	 */
 	String playGame(List<GamePlayer> players) {
-		final boolean drawBothRock = players.stream().map(m -> m.getMoveHandler().getMove())
+		if (!(players.size() == 2))
+			throw new RuntimeException("Maximum of 2 players allowed");
+		// determine if draw result(0).
+		final boolean playersMoveMatch = players.stream().map(m -> m.getMoveHandler().getMove())
 				.allMatch(m -> m.equals(player.getMoveHandler().getMove()));
 		final Move m = compareMove.apply(players.get(0).getMoveHandler(), players.get(1).getMoveHandler());
 
-		final int r = m.equals(player.getMoveHandler().getMove()) & !drawBothRock ? 1 : 0;
+		final int r = m.equals(player.getMoveHandler().getMove()) & !playersMoveMatch ? 1 : 0;
 		aggregatedScore.add(r);
 		return m.equals(DRAW) ? "Draw" : "Winner:" + m.name();
 
 	}
 
 	/**
+	 * uses tail recursion strategy to prevent returning DRAW which is not
+	 * conceptually a Move.
 	 * 
 	 * @return randomly selected instance of Move that is not a Draw.
 	 */
@@ -84,6 +93,11 @@ public class RockPaperScissors {
 
 	}
 
+	/**
+	 * Main method of RockPaperScissors.
+	 * 
+	 * @param args
+	 */
 	public static void main(String args[]) {
 
 		// instantiate RockPaperScissors with the Rock!
@@ -110,16 +124,22 @@ public class RockPaperScissors {
 					5));
 		}
 
+		// calculate the statistics for the fixed Move player against the random Move
+		// players
 		final IntSummaryStatistics stats = rockPaperScissors.verifyStats(rockPaperScissors.getAggregatedScore());
 		final StringBuilder statsOutput = new StringBuilder();
 
 		statsOutput.append("Player id:" + SPACE + rockPaperScissors.getPlayer().getId() + SPACE + "Average score:"
-				+ SPACE + decimalFormat.format(stats.getAverage()) + SPACE + "Total Score:" + SPACE + stats.getSum());
-		log.info(lineSeparator() + statsOutput.toString());
-		log.info(lineSeparator() + resultsOutput.toString());
+				+ SPACE + DEC_FORMAT.format(stats.getAverage()) + SPACE + "Total Score:" + SPACE + stats.getSum());
+		log.info(lineSeparator() + statsOutput.toString() + lineSeparator() + resultsOutput.toString());
 
 	}
 
+	/**
+	 * 
+	 * @param statCollection
+	 * @return the IntSummaryStatistics.
+	 */
 	IntSummaryStatistics verifyStats(List<Integer> statCollection) {
 
 		return statCollection.stream().collect(summarizingInt(Integer::intValue));

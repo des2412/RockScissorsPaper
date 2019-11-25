@@ -9,8 +9,6 @@ import com.desz.entertainment.rockscissorspaper.functions.MoveHandler;
 
 public class TestGamePlayer {
 
-	GamePlayer player;
-
 	@Test
 	public void test_expect_ok() {
 		assertNotNull(GamePlayer.builder().id("").moveHandler(MoveHandler.builder().move(ROCK).build()).build());

@@ -1,10 +1,13 @@
 package com.desz.entertainment.rockscissorspaper.functions;
 
+import static com.desz.entertainment.rockscissorspaper.functions.Move.DRAW;
+import static com.desz.entertainment.rockscissorspaper.functions.Move.PAPER;
+import static com.desz.entertainment.rockscissorspaper.functions.Move.ROCK;
+import static com.desz.entertainment.rockscissorspaper.functions.Move.SCISSORS;
+
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
-
-import static com.desz.entertainment.rockscissorspaper.functions.Move.*;
 
 public interface MoveFunction {
 
@@ -24,7 +27,6 @@ public interface MoveFunction {
 	}
 
 	BiFunction<MoveHandler, MoveHandler, Move> compareMove = (m1, m2) -> {
-		
 		return m2.getMove().equals(m1.getMove()) ? DRAW : comparisonHandler(m1, m2);
 
 	};

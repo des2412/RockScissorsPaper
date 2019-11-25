@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import com.desz.entertainment.rockscissorspaper.functions.MoveHandler;
 import com.desz.entertainment.rockscissorspaper.player.GamePlayer;
+import static com.desz.entertainment.rockscissorspaper.RockPaperScissors.DEC_FORMAT;
 
 public class TestRockPaperScissors {
 
@@ -35,7 +36,7 @@ public class TestRockPaperScissors {
 		final IntSummaryStatistics stats = sut.verifyStats(asList(1, 0, 1));
 		assertNotNull(stats);
 		assertEquals(2, stats.getSum());
-		assertEquals("0.66", RockPaperScissors.decimalFormat.format(stats.getAverage()));
+		assertEquals("0.66", DEC_FORMAT.format(stats.getAverage()));
 	}
 
 	@Test
@@ -58,6 +59,13 @@ public class TestRockPaperScissors {
 
 		});
 
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void test_play_game_expect_runtime_exception() {
+		final GamePlayer rocker = GamePlayer.builder().id("2").moveHandler(MoveHandler.builder().move(ROCK).build())
+				.build();
+		sut.playGame(asList(new GamePlayer[] { rocker, rocker, rocker }));
 	}
 
 	@Test
