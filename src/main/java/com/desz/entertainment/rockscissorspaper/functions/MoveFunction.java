@@ -5,9 +5,12 @@ import static com.desz.entertainment.rockscissorspaper.functions.Move.PAPER;
 import static com.desz.entertainment.rockscissorspaper.functions.Move.ROCK;
 import static com.desz.entertainment.rockscissorspaper.functions.Move.SCISSORS;
 
+import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 
 public interface MoveFunction {
 
@@ -25,16 +28,38 @@ public interface MoveFunction {
 		}
 		return null;
 	}
+	
+	static Move comparisonHandler2(MoveHandler m1, MoveHandler m2) {
+		final Move mv = m2.getMove();
+		Move result = DRAW;
+		switch (m1.getMove()) {
+		case ROCK:
+			result = mv.equals(SCISSORS) ? ROCK : result;
+			break;
+		case SCISSORS:
+			result = mv.equals(PAPER) ? SCISSORS : result;
+			break;
+		case PAPER:
+			result = mv.equals(ROCK) ? PAPER : result;
+			break;
+		default:
+			break;
+
+		}
+		return result;
+	}
 
 	BiFunction<MoveHandler, MoveHandler, Move> compareMove = (m1, m2) -> {
 		return m2.getMove().equals(m1.getMove()) ? DRAW : comparisonHandler(m1, m2);
 
 	};
 
-	Supplier<Move> getRandomMove = () -> {
-		final Move[] moves = Move.values();
-		Random random = new Random();
-		return moves[random.nextInt(moves.length)];
+	/**
+	 * Supply a randomly selected Move that is NOT a DRAW.
+	 */
+	Supplier<Move> supplyRandomMove = () -> {
+		final List<Move> moves = of(Move.values()).filter(mv -> !mv.equals(DRAW)).collect(toList());
+		return moves.get(new Random().nextInt(moves.size()));
 	};
 
 }

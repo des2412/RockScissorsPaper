@@ -5,7 +5,9 @@
 
 ### Maven Build 
 
-`mvn package exec:java -P run-profile ` builds and runs the application.
+`mvn package exec:java -P run-profile` 
+
+builds and runs the application.
 
 ### Implementation Overview
 
@@ -23,6 +25,8 @@ Classes are package private.
 
 
 ### Configuration
+
+tODO Configure GamePlayService using GameBuilder
 
 Externalised configuration has not been implemented. The main class RockPaperScissors has constructor parameters for GamePlayer which could be read from configuration properties file. The number of random players may similarly be configured.
 

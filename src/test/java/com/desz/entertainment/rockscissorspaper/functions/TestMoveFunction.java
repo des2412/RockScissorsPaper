@@ -5,7 +5,7 @@ import static com.desz.entertainment.rockscissorspaper.functions.Move.PAPER;
 import static com.desz.entertainment.rockscissorspaper.functions.Move.ROCK;
 import static com.desz.entertainment.rockscissorspaper.functions.Move.SCISSORS;
 import static com.desz.entertainment.rockscissorspaper.functions.MoveFunction.compareMove;
-import static com.desz.entertainment.rockscissorspaper.functions.MoveFunction.getRandomMove;
+import static com.desz.entertainment.rockscissorspaper.functions.MoveFunction.supplyRandomMove;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,7 +20,7 @@ public class TestMoveFunction {
 
 	@Test
 	public void test_get_random_number_not_null() {
-		assertNotNull(getRandomMove.get());
+		assertNotNull(supplyRandomMove.get());
 	}
 
 	@Test
